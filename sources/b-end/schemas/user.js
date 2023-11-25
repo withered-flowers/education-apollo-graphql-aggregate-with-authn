@@ -1,5 +1,6 @@
 const { GraphQLError } = require("graphql");
-const { getUserByEmail } = require("../models");
+const { getUserByEmail, getUserByUsername } = require("../models");
+const { generateToken } = require("../utils/jwt");
 
 const userTypeDefs = `#graphql
   type User {
@@ -35,18 +36,32 @@ const userResolvers = {
       };
     },
 
-    userLogin: (_, args, contextValue) => {
+    userLogin: async (_, args, contextValue) => {
       const { username, password } = args;
 
-      contextValue.dummyFunction();
+      // contextValue.dummyFunction();
+      const user = await getUserByUsername(username);
 
-      // TODO: Make logic for login here
-      throw new GraphQLError("Not implemented yet");
+      // ?? Make logic for login here
+      // !! In real apps, maybe the password is hashed and you need to compare it with the hashed password in the database
+      // !! In this demo apps, we just compare the plain password as it is (unhashed)
+      if (!user || user.password !== password) {
+        throw new GraphQLError("Invalid username or password");
+      }
+
+      // Make the token here
+      const payload = {
+        id: user._id,
+        email: user.email,
+      };
+
+      const token = generateToken(payload);
 
       return {
         statusCode: 501,
         data: {
-          token: "not-implemented-yet",
+          // Return the token
+          token: token,
         },
       };
     },

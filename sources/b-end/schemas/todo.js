@@ -9,7 +9,9 @@ const todoTypeDefs = `#graphql
   }
 
   input TodoCreateInput {
-    userId: ID!
+    # Since the userId will be fetch from authentication
+    # We can make it "just optional"
+    userId: ID
     title: String!
     completed: Boolean!
   }
@@ -36,10 +38,17 @@ const todoResolvers = {
     },
   },
   Mutation: {
-    todoCreate: async (_, args) => {
-      const { input } = args;
-      const { userId, title, completed } = input;
+    todoCreate: async (_, args, contextValue) => {
+      // ?? We will use the authentication here
+      // ?? Remember the doAuthentication will return { id, name }
+      const { id: userId } = await contextValue.doAuthentication();
 
+      const { input } = args;
+      // ?? Since userId is declared via doAuthentication, we don't need to read it from input
+      // const { userId, title, completed } = input;
+      const { title, completed } = input;
+
+      // ?? The rest is the same
       const todo = {
         userId,
         title,
