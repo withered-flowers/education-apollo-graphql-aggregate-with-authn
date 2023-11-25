@@ -1,3 +1,5 @@
+const { getTodos, createNewTodo, destroyTodoById } = require("../models/index");
+
 const todoTypeDefs = `#graphql
   type Todo {
     _id: ID!
@@ -24,31 +26,38 @@ const todoTypeDefs = `#graphql
 
 const todoResolvers = {
   Query: {
-    todoList: () => {
-      // TODO: Fetch data from models
+    todoList: async () => {
+      const todoList = await getTodos();
+
       return {
         statusCode: 200,
-        data: null,
+        data: todoList,
       };
     },
   },
   Mutation: {
-    todoCreate: (_, args) => {
+    todoCreate: async (_, args) => {
       const { input } = args;
       const { userId, title, completed } = input;
 
-      // TODO: Create data from models
+      const todo = {
+        userId,
+        title,
+        completed,
+      };
+
+      const result = await createNewTodo(todo);
 
       return {
         statusCode: 200,
-        message: `Todo with id ${id} created successfully`,
+        message: `Todo with id ${result.insertedId} created successfully`,
       };
     },
 
-    todoDelete: (_, args, contextValue) => {
+    todoDelete: async (_, args) => {
       const { id } = args;
 
-      // TODO: Delete data from models
+      await destroyTodoById(id);
 
       return {
         statusCode: 200,
@@ -58,7 +67,7 @@ const todoResolvers = {
   },
 };
 
-modules.exports = {
+module.exports = {
   todoTypeDefs,
   todoResolvers,
 };

@@ -1,3 +1,6 @@
+const { GraphQLError } = require("graphql");
+const { getUserByEmail } = require("../models");
+
 const userTypeDefs = `#graphql
   type User {
     _id: ID!
@@ -17,30 +20,33 @@ const userResolvers = {
     userByEmail: (_, args) => {
       const { email } = args;
 
-      // TODO: Fetch data from models
+      const user = getUserByEmail(email);
 
       return {
         statusCode: 200,
-        data: null,
+        data: user,
       };
     },
 
-    userLogin: (_, args) => {
+    userLogin: (_, args, contextValue) => {
       const { username, password } = args;
 
+      contextValue.dummyFunction();
+
       // TODO: Make logic for login here
+      throw new GraphQLError("Not implemented yet");
 
       return {
-        statusCode: 200,
+        statusCode: 501,
         data: {
-          token: "this-is-a-token",
+          token: "not-implemented-yet",
         },
       };
     },
   },
 };
 
-modules.exports = {
+module.exports = {
   userTypeDefs,
   userResolvers,
 };

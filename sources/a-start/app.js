@@ -1,10 +1,14 @@
-// TODO: Let's write something here
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 
 const { responseTypeDefs } = require("./schemas/response");
 const { todoTypeDefs, todoResolvers } = require("./schemas/todo");
 const { userTypeDefs, userResolvers } = require("./schemas/user");
+const { getClientInstance } = require("./config/db");
 
 const server = new ApolloServer({
   typeDefs: [responseTypeDefs, userTypeDefs, todoTypeDefs],
@@ -12,6 +16,10 @@ const server = new ApolloServer({
 });
 
 (async () => {
+  // Connect to database
+  await getClientInstance();
+  console.log("Database connected successfully");
+
   const { url } = await startStandaloneServer(server, {
     listen: 4000,
     context: async ({ req, res }) => {
