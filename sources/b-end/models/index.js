@@ -6,7 +6,32 @@ const USERS_COLLECTION = "Users";
 
 const getTodos = async () => {
   const db = await getDb();
-  const todos = await db.collection(TODOS_COLLECTION).find({}).toArray();
+  // ?? Standard Query without aggregation lookup
+  // const todos = await db.collection(TODOS_COLLECTION).find({}).toArray();
+
+  // ?? Query with Aggregation Lookup
+  const todos = await db
+    .collection(TODOS_COLLECTION)
+    .aggregate([
+      // ?? We will aggregate lookup
+      {
+        $lookup: {
+          from: USERS_COLLECTION,
+          localField: "userId",
+          foreignField: "_id",
+          as: "User",
+        },
+      },
+      // ?? If you want to use "where", you can use $match
+      // {
+      //   $match: {
+      //     completed: true,
+      //   },
+      // },
+    ])
+    .toArray();
+
+  console.log(JSON.stringify(todos, null, 2));
 
   return todos;
 };
