@@ -4,14 +4,15 @@ if (process.env.NODE_ENV !== "production") {
 
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
-const { GraphQLError } = require("graphql");
+// const { GraphQLError } = require("graphql");
 
 const { responseTypeDefs } = require("./schemas/response");
 const { todoTypeDefs, todoResolvers } = require("./schemas/todo");
 const { userTypeDefs, userResolvers } = require("./schemas/user");
 const { getClientInstance } = require("./config/db");
-const { readPayload } = require("./utils/jwt");
-const { getUserByEmail } = require("./models");
+// const { readPayload } = require("./utils/jwt");
+// const { getUserByEmail } = require("./models");
+const authN = require("./utils/auth");
 
 const server = new ApolloServer({
   typeDefs: [responseTypeDefs, userTypeDefs, todoTypeDefs],
@@ -32,42 +33,46 @@ const server = new ApolloServer({
         dummyFunction: () => {
           console.log("We can read headers here", req.headers);
         },
-        // We will make a new function to do authentication here
-        doAuthentication: async () => {
-          const headerAuthorization = req.headers.authorization;
 
-          if (!headerAuthorization) {
-            throw new GraphQLError("You are not authenticated", {
-              extensions: {
-                http: "401",
-                code: "UNAUTHENTICATED",
-              },
-            });
-          }
+        // // We will make a new function to do authentication here
+        // doAuthentication: async () => {
+        //   const headerAuthorization = req.headers.authorization;
 
-          const token = headerAuthorization.split(" ")[1];
+        //   if (!headerAuthorization) {
+        //     throw new GraphQLError("You are not authenticated", {
+        //       extensions: {
+        //         http: "401",
+        //         code: "UNAUTHENTICATED",
+        //       },
+        //     });
+        //   }
 
-          // We need to read the token here
-          const payload = readPayload(token);
+        //   const token = headerAuthorization.split(" ")[1];
 
-          // We need to check if the user is exist in the database
-          const user = await getUserByEmail(payload.email);
+        //   // We need to read the token here
+        //   const payload = readPayload(token);
 
-          if (!user) {
-            throw new GraphQLError("You are not authenticated", {
-              extensions: {
-                http: "401",
-                code: "UNAUTHENTICATED",
-              },
-            });
-          }
+        //   // We need to check if the user is exist in the database
+        //   const user = await getUserByEmail(payload.email);
 
-          // We will give the additional data via return value (context)
-          return {
-            id: user._id,
-            name: user.name,
-          };
-        },
+        //   if (!user) {
+        //     throw new GraphQLError("You are not authenticated", {
+        //       extensions: {
+        //         http: "401",
+        //         code: "UNAUTHENTICATED",
+        //       },
+        //     });
+        //   }
+
+        //   // We will give the additional data via return value (context)
+        //   return {
+        //     id: user._id,
+        //     name: user.name,
+        //   };
+        // },
+
+        // ?? We can also refactor the code above into a function and put in as helper (utils/auth.js -> authN)
+        doAuthentication: async () => await authN(req),
       };
     },
   });
