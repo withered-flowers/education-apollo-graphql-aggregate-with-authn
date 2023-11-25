@@ -1,0 +1,23 @@
+[
+  {
+    "_id": { "$oid": "656142817d2dd99e13a69f8f" },
+    "name": "Leanne Graham",
+    "username": "Bret",
+    "password": "123456",
+    "email": "halo@mail.com"
+  },
+  {
+    "_id": { "$oid": "656142817d2dd99e13a69f90" },
+    "name": "Ervin Howell",
+    "username": "Antonette",
+    "password": "123456",
+    "email": "admin@mail.com"
+  },
+  {
+    "_id": { "$oid": "656142817d2dd99e13a69f91" },
+    "name": "Clementine Bauch",
+    "username": "Samantha",
+    "password": "123456",
+    "email": "other@mail.com"
+  }
+]
