@@ -10,8 +10,15 @@ const userTypeDefs = `#graphql
     email: String!
   }
 
+  type UserWithoutPassword {
+    _id: ID!
+    name: String!
+    username: String!
+    email: String!
+  }
+
   type Query {
-    userByEmail(email: String!): UserResponse 
+    userByEmail(email: String!): UserWithoutPasswordResponse 
     userLogin(username: String!, password: String!): UserLoginResponse
   }
 `;

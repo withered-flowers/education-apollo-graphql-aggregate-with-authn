@@ -26,6 +26,13 @@ const responseTypeDefs = `#graphql
     data: User
   }
 
+  type UserWithoutPasswordResponse implements Response {
+    statusCode: String!
+    message: String
+    error: String
+    data: UserWithoutPassword
+  }
+
   # We will create a new type definition for UserResponse
   type UserLoginResponse implements Response {
     statusCode: String!

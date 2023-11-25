@@ -35,7 +35,21 @@ const destroyTodoById = async (id) => {
 
 const getUserByEmail = async (email) => {
   const db = await getDb();
-  const result = await db.collection(USERS_COLLECTION).findOne({ email });
+  const result = await db.collection(USERS_COLLECTION).findOne(
+    { email },
+    {
+      projection: {
+        password: 0,
+      },
+    }
+  );
+
+  return result;
+};
+
+const getUserByUsername = async (username) => {
+  const db = await getDb();
+  const result = await db.collection(USERS_COLLECTION).findOne({ username });
 
   return result;
 };
@@ -45,4 +59,5 @@ module.exports = {
   createNewTodo,
   destroyTodoById,
   getUserByEmail,
+  getUserByUsername,
 };
