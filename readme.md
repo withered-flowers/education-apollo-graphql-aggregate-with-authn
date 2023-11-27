@@ -8,6 +8,10 @@
 
 ## Scope Pembelajaran
 
+- Authentication via JWT
+- Aggregate Query with $lookup
+- Introduction to Embedded Document
+
 ## Demo
 
 ## References
