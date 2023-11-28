@@ -8,6 +8,14 @@ const todoTypeDefs = `#graphql
     userId: ID!
   }
 
+  type TodoAggregate {
+    _id: ID!
+    title: String!
+    completed: Boolean!
+    userId: ID!
+    User: User
+  }
+
   input TodoCreateInput {
     # Since the userId will be fetch from authentication
     # We can make it "just optional"

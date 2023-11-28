@@ -45,7 +45,7 @@ const responseTypeDefs = `#graphql
     statusCode: String!
     message: String
     error: String
-    data: [Todo]
+    data: [TodoAggregate]
   }
 
   type TodoMutationResponse implements Response {

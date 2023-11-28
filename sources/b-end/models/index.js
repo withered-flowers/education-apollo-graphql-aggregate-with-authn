@@ -15,6 +15,7 @@ const getTodos = async () => {
     .aggregate([
       // ?? We will aggregate lookup
       {
+        // Remember this lookup will always result in array
         $lookup: {
           from: USERS_COLLECTION,
           localField: "userId",
@@ -28,6 +29,19 @@ const getTodos = async () => {
       //     completed: true,
       //   },
       // },
+      // ?? If you want to filter the output, you can use $project
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          completed: 1,
+          userId: 1,
+          // ?? Lookup value will always return array, so we need to use $arrayElemAt to get the first element
+          // User: { $arrayElemAt: ["$User", 0] },
+          // ?? Or we can use first
+          User: { $first: "$User" },
+        },
+      },
     ])
     .toArray();
 
