@@ -25,49 +25,49 @@ const todoTypeDefs = `#graphql
 `;
 
 const todoResolvers = {
-  Query: {
-    todoList: async () => {
-      const todoList = await getTodos();
+	Query: {
+		todoList: async () => {
+			const todoList = await getTodos();
 
-      return {
-        statusCode: 200,
-        data: todoList,
-      };
-    },
-  },
-  Mutation: {
-    todoCreate: async (_, args) => {
-      const { input } = args;
-      const { userId, title, completed } = input;
+			return {
+				statusCode: 200,
+				data: todoList,
+			};
+		},
+	},
+	Mutation: {
+		todoCreate: async (_, args) => {
+			const { input } = args;
+			const { userId, title, completed } = input;
 
-      const todo = {
-        userId,
-        title,
-        completed,
-      };
+			const todo = {
+				userId,
+				title,
+				completed,
+			};
 
-      const result = await createNewTodo(todo);
+			const result = await createNewTodo(todo);
 
-      return {
-        statusCode: 200,
-        message: `Todo with id ${result.insertedId} created successfully`,
-      };
-    },
+			return {
+				statusCode: 200,
+				message: `Todo with id ${result.insertedId} created successfully`,
+			};
+		},
 
-    todoDelete: async (_, args) => {
-      const { id } = args;
+		todoDelete: async (_, args) => {
+			const { id } = args;
 
-      await destroyTodoById(id);
+			await destroyTodoById(id);
 
-      return {
-        statusCode: 200,
-        message: `Todo with id ${id} deleted successfully`,
-      };
-    },
-  },
+			return {
+				statusCode: 200,
+				message: `Todo with id ${id} deleted successfully`,
+			};
+		},
+	},
 };
 
 module.exports = {
-  todoTypeDefs,
-  todoResolvers,
+	todoTypeDefs,
+	todoResolvers,
 };
