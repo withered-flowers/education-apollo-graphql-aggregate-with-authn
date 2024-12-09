@@ -1,5 +1,5 @@
-const { getDb } = require("../config/db");
-const { ObjectId } = require("mongodb");
+import { ObjectId } from "mongodb";
+import { getDb } from "../config/db.js";
 
 const TODOS_COLLECTION = "Todos";
 const USERS_COLLECTION = "Users";
@@ -93,7 +93,7 @@ const getUserByUsername = async (username) => {
 	return result;
 };
 
-module.exports = {
+export {
 	getTodos,
 	createNewTodo,
 	destroyTodoById,

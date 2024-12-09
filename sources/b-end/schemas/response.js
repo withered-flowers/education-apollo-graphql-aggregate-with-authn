@@ -58,6 +58,4 @@ const responseTypeDefs = `#graphql
   # Because this type definition is only used for response
 `;
 
-module.exports = {
-  responseTypeDefs,
-};
+export { responseTypeDefs };

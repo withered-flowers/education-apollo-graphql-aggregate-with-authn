@@ -1,4 +1,4 @@
-const { getTodos, createNewTodo, destroyTodoById } = require("../models/index");
+import { createNewTodo, destroyTodoById, getTodos } from "../models/index.js";
 
 const todoTypeDefs = `#graphql
   type Todo {
@@ -85,7 +85,4 @@ const todoResolvers = {
 	},
 };
 
-module.exports = {
-	todoTypeDefs,
-	todoResolvers,
-};
+export { todoTypeDefs, todoResolvers };
