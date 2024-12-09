@@ -1,4 +1,11 @@
-const { MongoClient } = require("mongodb");
+const isNotProduction = process.env.NODE_ENV !== "production";
+
+if (isNotProduction) {
+	const dotenv = await import("dotenv");
+	dotenv.config();
+}
+
+import { MongoClient } from "mongodb";
 
 const CONNECTION_STRING = process.env.MONGODB_CONN_STRING;
 const DATABASE_NAME = process.env.MONGODB_DB_NAME;
@@ -19,7 +26,4 @@ const getDb = async () => {
 	return client.db(DATABASE_NAME);
 };
 
-module.exports = {
-	getClientInstance,
-	getDb,
-};
+export { getClientInstance, getDb };
